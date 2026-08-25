@@ -1,129 +1,73 @@
-# CHANDLER
+# CHANDLER — Static Hosting Package
 
-**Curated Hardware And Normalized Design Library for Engineering Reuse**
+CHANDLER is a local-first parts explorer for makers and prototype development. This package contains the complete no-compile application and a catalog of 530 electronic, electromechanical, mechanical, and material component families.
 
-CHANDLER is a local-first common-parts library and sourcing workbench for makers, product developers, educators, repairers, laboratories, hardware startups, and small engineering teams. It answers: **What proven, readily available part or part family should I reach for to solve this design problem?**
+## Install on a website
 
-CHANDLER is curated rather than exhaustive. It keeps stable engineering definitions separate from approved variants and frequently changing supplier offers, treats interfaces as first-class records, preserves source provenance, and presents Observed Commonness separately from Prototype Utility.
+1. Extract `CHANDLER-v0.2.0-static-folder.zip`.
+2. Upload all extracted files and folders directly into one public folder on your web server.
+3. Keep `data` and `public` beside `index.html`.
+4. Visit the address for that folder.
 
-## Current release
+For example, to run CHANDLER at `https://example.com/chandler/`, the server should contain:
 
-- Application version: `0.2.0`
-- Starter catalog: `2026.08.24-starter`
-- Schema version: `3`
-- Data status: 530 vendor-neutral starter families across 34 categories. Twelve have detailed demonstration passports; 518 are clearly marked candidate seeds with scores, supplier facts, exact variants, price, and stock left `Unknown` until evidence and human review are added.
-
-## Run the application
-
-### Hosted development application
-
-The primary application is implemented in `app/` and runs through the repository's existing package scripts:
-
-```bash
-npm ci
-npm run dev
+```text
+chandler/
+  index.html
+  manifest.webmanifest
+  service-worker.js
+  README.md
+  data/
+    catalog.json
+    catalog-manifest.json
+  public/
+    favicon.svg
 ```
 
-### No-compile, host-anywhere application
+There is no installation command, package manager, build step, database, or server-side language. Do not upload the ZIP itself and expect it to run; extract it first.
 
-`index.html` is a self-contained public build with no external runtime dependencies. Serve the repository from any ordinary static web server:
+## Test locally
+
+Opening `index.html` directly with a `file://` address prevents some browsers from loading the catalog. Test it through a small local web server instead:
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then open `http://localhost:8080/`. The portable build also works when copied with `manifest.webmanifest` and `service-worker.js` to an ordinary static host. A local web server is recommended because browsers restrict service workers and some file operations under `file://`.
+Then open `http://localhost:8080/`.
 
-## Maker Mode
+## Browser storage
 
-- Intent, alias, part-number, category, dimension, unit, standard, and interface search
-- Simple **All Components** explorer with full-field search, domain/category filters, compact rows, and pagination
-- Curated category browsing and reusable interface records
-- Part Passports with normalized specifications, limitations, design-stage tags, assets, evidence state, and separate scores
-- Side-by-side comparison for up to four families
-- Local favorites, stock, notes, and custom parts
-- Project Bill of Materials (BOM) editing with quantity, unit, intent, notes, and revision snapshots
-- JSON, comma-separated value, Markdown, and print exports
-- Full local backup, validated restore, Fresh Start, and catalog rollback previews
-- Dark, light, and high-contrast themes; keyboard focus; reduced-motion support; responsive layouts
+Projects, favorites, comparisons, review decisions, and preferences are stored locally in each user's browser. CHANDLER has no telemetry, account requirement, advertising, or hidden network request.
 
-## Curator Mode
+Replacing the hosted application files does not normally erase browser data as long as the website address remains the same. Users can also export a backup from **Updates & Backup** before replacing files.
 
-- Source registry and isolated adapter status
-- Paste-based manual import with column interpretation, preview, validation, and staging
-- Immutable raw observations and candidate matches
-- Human review decisions with local audit events
-- Canonical-family table and first-class interface records
-- Transparent, deterministic normalization-rule tester
-- Community proposal builder with JSON export
-- Package-quality dashboard, catalog manifests, releases, checkpoints, and rollback previews
+## Offline use
 
-The starter interface never performs automatic crawling or live supplier requests.
+`service-worker.js` caches the application after the first successful visit. Public service-worker caching requires Hypertext Transfer Protocol Secure (HTTPS). CHANDLER still runs as an ordinary online static page when service-worker caching is unavailable.
 
-## Local data and privacy
+## Catalog status
 
-The application stores user work in the browser's Indexed Database API, with a browser-storage fallback only when Indexed Database API access is unavailable. Stored data includes favorites, comparison selections, project lines, stock, notes, custom parts, curator decisions, and theme preferences.
+- Application: `0.2.0`
+- Catalog: `2026.08.24-starter`
+- Schema: `3`
+- Families: `530` across `34` categories
+- Detailed demonstration passports: `12`
+- Unscored candidate seed families: `518`
 
-There is no telemetry, advertising, mandatory account, supplier credential, or hidden network request. Network access is used only when the user deliberately opens a reference or configures a future update or supplier service.
+Candidate seeds intentionally leave supplier facts, price, stock, exact variants, scores, dimensions, standards, interfaces, and compatibility unknown until evidence and human review are added.
 
-## Data architecture
+## Updating the catalog
 
-CHANDLER separates four layers:
+Replace `data/catalog.json` and `data/catalog-manifest.json` with a newer compatible catalog package. If application files also change, replace the full contents of the static folder while preserving its web address.
 
-1. **Raw observations** — immutable original Bill of Materials lines and source evidence.
-2. **Normalization rules** — versioned aliases, units, classification, parsing, and matching transformations.
-3. **Canonical catalog** — curator-controlled families, variants, interfaces, relationships, and recommendations.
-4. **Published catalog** — generated, validated packages consumed by the public application.
+## Troubleshooting
 
-Part families, approved variants, and supplier offers have distinct identities and mutation policies. Changing a price or stock fact cannot rewrite an engineering definition.
+- **Catalog does not appear:** Confirm `data/catalog.json` exists with the same capitalization and relative folder structure shown above.
+- **Old version remains visible:** Refresh the page once while online. If necessary, clear site data for this address so the previous service-worker cache is removed.
+- **Offline mode does not activate:** Confirm the page is served through HTTPS and every listed file can be opened from the server.
+- **Double folder in the address:** Move the contents of the extracted folder up one level so `index.html` is directly inside the intended web folder.
 
-See `docs/data-model.md`, `docs/methodology.md`, `docs/governance.md`, `docs/source-policy.md`, and `docs/compatibility.md`.
+## Important limitation
 
-## Ingestion toolchain
-
-The Python command-line tool is independent from the public application and uses only the Python standard library:
-
-```bash
-python3 ingestion/chandler_ingest.py normalize "DIN 912 M3x8"
-python3 ingestion/chandler_ingest.py import-tsv tests/fixtures/demo-bom.tsv reports/observations.json
-python3 ingestion/chandler_ingest.py validate data/catalog.json
-python3 ingestion/chandler_ingest.py manifest data/catalog.json reports/catalog-manifest.json
-```
-
-Every adapter must emit the same raw-observation structure and retain original text, project identity, source, license, collection date, parser version, content hash, and ingestion-run identifier.
-
-## Catalog publishing
-
-1. Run approved source adapters.
-2. Deduplicate projects and immutable observations.
-3. Apply versioned normalization rules to candidate data.
-4. Review candidate clusters and every compatibility proposal.
-5. Validate schemas, identifiers, references, provenance, licenses, units, scores, migrations, and cycles.
-6. Generate the catalog package, manifest, SHA-256 checksum, release diff, and methodology report.
-7. Import the package into a copy of the current local catalog.
-8. Create a recovery checkpoint, preview migrations, validate, activate, and retain the previous package for rollback.
-
-## Backward compatibility
-
-The current project schema is version 3. Importers must detect the version before mutation, preserve the original file, migrate a copy, validate the result, and retain unknown fields when safe. Future schema versions are rejected with a clear error. Compatibility guarantees and fixtures are documented in `docs/compatibility.md`.
-
-## Testing
-
-```bash
-npm test
-python3 -m unittest discover tests/python
-```
-
-Validation covers duplicate identifiers, required fields, family-interface references, quantities, provenance, score inputs, circular relationships, schema compatibility, checksums, offline assets, and backup safety. The starter-provided production build verification remains the deployment gate.
-
-## Important limitations
-
-CHANDLER does not guarantee that parts are interchangeable. Before committing a design, review manufacturer datasheets and drawings, applicable standards, tolerances and fits, loads and duty cycles, environmental and safety requirements, exact variants, and current supplier facts. Class A and Class B mechanical substitution claims require human approval and documented evidence.
-
-## Contributing
-
-Technical contributors may propose catalog or code changes through a pull request. Ordinary makers may use Curator Mode's Community Proposal Builder and attach its JSON output to an issue or other configured submission channel. See `docs/contributing.md`.
-
-## License
-
-Application code is available under the MIT License. Catalog observations, linked assets, supplier text, drawings, Computer-Aided Design (CAD) models, and Electronic Design Automation (EDA) assets retain their own source-specific licenses and must not be redistributed unless permission is recorded.
+CHANDLER is a starting-point library, not proof that two parts are interchangeable. Verify manufacturer documentation, drawings, dimensions, tolerances, fits, ratings, loads, duty cycles, environmental requirements, safety requirements, and the exact selected variant before committing a design.
