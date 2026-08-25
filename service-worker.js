@@ -1,4 +1,4 @@
-const CACHE = "chandler-shell-v0.4.0";
+const CACHE = "chandler-shell-v0.5.0";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./favicon.svg"];
 self.addEventListener("install", (event) => event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(CORE))));
 self.addEventListener("activate", (event) => event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))));
