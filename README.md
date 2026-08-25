@@ -8,10 +8,10 @@ CHANDLER is curated rather than exhaustive. It keeps stable engineering definiti
 
 ## Current release
 
-- Application version: `0.1.0`
-- Demonstration catalog: `2026.08.24-demo`
+- Application version: `0.2.0`
+- Starter catalog: `2026.08.24-starter`
 - Schema version: `3`
-- Data status: all bundled families, scores, observations, and review records are clearly labeled demonstration data. Price and stock are `Unknown`.
+- Data status: 530 vendor-neutral starter families across 34 categories. Twelve have detailed demonstration passports; 518 are clearly marked candidate seeds with scores, supplier facts, exact variants, price, and stock left `Unknown` until evidence and human review are added.
 
 ## Run the application
 
@@ -37,6 +37,7 @@ Then open `http://localhost:8080/`. The portable build also works when copied wi
 ## Maker Mode
 
 - Intent, alias, part-number, category, dimension, unit, standard, and interface search
+- Simple **All Components** explorer with full-field search, domain/category filters, compact rows, and pagination
 - Curated category browsing and reusable interface records
 - Part Passports with normalized specifications, limitations, design-stage tags, assets, evidence state, and separate scores
 - Side-by-side comparison for up to four families
@@ -57,7 +58,7 @@ Then open `http://localhost:8080/`. The portable build also works when copied wi
 - Community proposal builder with JSON export
 - Package-quality dashboard, catalog manifests, releases, checkpoints, and rollback previews
 
-The demonstration interface never performs automatic crawling or live supplier requests.
+The starter interface never performs automatic crawling or live supplier requests.
 
 ## Local data and privacy
 

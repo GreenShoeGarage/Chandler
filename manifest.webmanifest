@@ -1,0 +1,10 @@
+{
+  "name": "CHANDLER — Curated Hardware Library",
+  "short_name": "CHANDLER",
+  "description": "A local-first curated parts library for better prototypes.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#111311",
+  "theme_color": "#111311",
+  "icons": [{ "src": "public/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

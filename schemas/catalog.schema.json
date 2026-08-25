@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chandler.local/schemas/catalog.schema.json",
+  "title": "CHANDLER Catalog",
+  "type": "object",
+  "required": ["manifest", "families", "variants", "interfaces", "compatibility", "suppliers", "offers", "assets", "evidence"],
+  "properties": {
+    "manifest": { "$ref": "#/$defs/manifest" },
+    "families": { "type": "array", "items": { "$ref": "#/$defs/family" } },
+    "variants": { "type": "array", "items": { "$ref": "#/$defs/variant" } },
+    "interfaces": { "type": "array", "items": { "$ref": "#/$defs/interface" } },
+    "compatibility": { "type": "array", "items": { "$ref": "#/$defs/compatibility" } },
+    "suppliers": { "type": "array", "items": { "type": "object", "required": ["id", "name", "region"] } },
+    "offers": { "type": "array", "items": { "type": "object", "required": ["id", "familyId", "supplierId", "freshness"] } },
+    "assets": { "type": "array", "items": { "type": "object", "required": ["id", "type", "source", "licenseState", "validationState"] } },
+    "evidence": { "type": "array", "items": { "type": "object", "required": ["id", "subjectId", "sourceId", "summary"] } }
+  },
+  "$defs": {
+    "manifest": {
+      "type": "object",
+      "required": ["catalogVersion", "schemaVersion", "generatedAt", "partFamilyCount", "partVariantCount", "observationCount", "checksumAlgorithm", "checksum"],
+      "properties": { "catalogVersion": { "type": "string" }, "schemaVersion": { "type": "integer", "minimum": 1 }, "generatedAt": { "type": "string", "format": "date-time" }, "partFamilyCount": { "type": "integer", "minimum": 0 }, "partVariantCount": { "type": "integer", "minimum": 0 }, "observationCount": { "type": "integer", "minimum": 0 }, "previousVersion": { "type": ["string", "null"] }, "checksumAlgorithm": { "const": "SHA-256" }, "checksum": { "type": "string" }, "signature": { "type": ["object", "null"] } }
+    },
+    "family": {
+      "type": "object", "required": ["id", "slug", "name", "domain", "category", "description", "interfaces", "specifications", "prototypeUtility", "observedCommonness", "confidence", "verificationState", "lifecycleState", "revision"],
+      "properties": { "id": { "type": "string", "pattern": "^CH-[A-Z]+-[0-9]{6}$" }, "slug": { "type": "string" }, "name": { "type": "string" }, "domain": { "enum": ["Electronic", "Electromechanical", "Mechanical", "Material"] }, "category": { "type": "string" }, "description": { "type": "string" }, "interfaces": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "specifications": { "type": "object" }, "prototypeUtility": { "type": ["number", "null"], "minimum": 0, "maximum": 100 }, "observedCommonness": { "type": ["number", "null"], "minimum": 0, "maximum": 100 }, "confidence": { "enum": ["Low", "Medium", "High", "Unknown"] }, "verificationState": { "enum": ["Suggested", "Data checked", "Bench tested", "Recommended", "Watch", "Retired", "Rejected"] }, "lifecycleState": { "type": "string" }, "revision": { "type": "integer", "minimum": 1 } }
+    },
+    "variant": { "type": "object", "required": ["id", "familyId", "name", "attributes", "lifecycleState", "revision"], "properties": { "id": { "type": "string" }, "familyId": { "type": "string" }, "name": { "type": "string" }, "attributes": { "type": "object" }, "lifecycleState": { "type": "string" }, "revision": { "type": "integer", "minimum": 1 } } },
+    "interface": { "type": "object", "required": ["id", "name", "domain", "definition", "limitations", "revision"], "properties": { "id": { "type": "string", "pattern": "^CH-I-[0-9]{6}$" }, "name": { "type": "string" }, "domain": { "type": "string" }, "definition": { "type": "string" }, "limitations": { "type": "string" }, "revision": { "type": "integer", "minimum": 1 } } },
+    "compatibility": { "type": "object", "required": ["id", "fromId", "toId", "class", "limitations", "reviewDecisionId"], "properties": { "class": { "enum": ["A", "B", "C", "D"] }, "reviewDecisionId": { "type": "string", "minLength": 1 } } }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "catalogVersion": "2026.08.24-starter",
+  "schemaVersion": 3,
+  "generatedAt": "2026-08-25T01:35:31Z",
+  "partFamilyCount": 530,
+  "partVariantCount": 0,
+  "observationCount": 4,
+  "previousVersion": "2026.08.24-demo",
+  "checksumAlgorithm": "SHA-256",
+  "checksum": "4628ca822b6e6a7fb35cfb045301dd4679db25cbdbfe53b321de5de8411032cb"
+}
